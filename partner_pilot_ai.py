@@ -295,6 +295,20 @@ def is_listicle_title(title: str) -> bool:
     return any(re.search(p, text) for p in patterns)
 
 
+def mentions_multiple_companies(content: str) -> bool:
+    """
+    A directory/listicle page often names several companies back-to-back
+    (e.g. "Physicswallah Limited ... Indegene Private Limited ...").
+    A real company's OWN page rarely names 2+ other companies this way.
+    Counting repeated legal-entity suffixes (Limited, Ltd, Inc, LLC, Pvt)
+    is a simple, free, honest signal -- not perfect, but catches directory
+    pages that a title-only check misses.
+    """
+    suffix_pattern = r"\b(limited|ltd|inc|llc|pvt\.?\s*ltd|private limited)\b"
+    matches = re.findall(suffix_pattern, content.lower())
+    return len(matches) >= 2
+
+
 def search_web(queries: list, api_key: str, max_results_per_query: int = 5):
     """
     Run each query through Tavily and combine the results.
@@ -347,10 +361,12 @@ def extract_company_candidates(raw_results: list) -> list:
             continue  # verification step: reject known non-company domains
 
         title = (r.get("title") or "").strip()
+        content = r.get("content") or ""
         if is_listicle_title(title):
             continue  # verification step: reject roundup/how-to articles
+        if mentions_multiple_companies(content):
+            continue  # verification step: reject pages listing several companies
 
-        content = r.get("content") or ""
         combined_text = f"{title} {content}"
 
         name = re.split(r"[|\-–—:]", title)[0].strip() if title else domain
