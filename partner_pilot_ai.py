@@ -547,6 +547,61 @@ def add_partner_row(name, industry, audience, size, notes, campaign="General Out
 # ============================================================================
 st.set_page_config(page_title="PartnerPilot AI", layout="wide")
 
+# Custom visual polish -- purely cosmetic CSS, no logic changes.
+# Rounded cards, subtle borders/shadows, cleaner metrics and buttons.
+st.markdown("""
+<style>
+    .stApp { font-family: 'Segoe UI', sans-serif; }
+
+    div[data-testid="stMetric"] {
+        background-color: #1B2226;
+        border: 1px solid #2A3338;
+        border-radius: 12px;
+        padding: 16px 20px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    div[data-testid="stExpander"] {
+        border: 1px solid #2A3338;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    div[data-testid="stForm"] {
+        border: 1px solid #2A3338;
+        border-radius: 12px;
+        padding: 20px;
+        background-color: #161B1F;
+    }
+
+    .stButton > button, .stDownloadButton > button, .stFormSubmitButton > button {
+        border-radius: 8px;
+        border: 1px solid #5FA8A0;
+        transition: all 0.15s ease-in-out;
+    }
+    .stButton > button:hover, .stDownloadButton > button:hover, .stFormSubmitButton > button:hover {
+        background-color: #5FA8A0;
+        color: #111418;
+    }
+
+    div[data-testid="stTabs"] button {
+        border-radius: 8px 8px 0 0;
+    }
+
+    div[data-testid="stDataFrame"] {
+        border: 1px solid #2A3338;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .stAlert {
+        border-radius: 10px;
+    }
+
+    h1 { letter-spacing: -0.5px; }
+</style>
+""", unsafe_allow_html=True)
+
 st.title("🤝 PartnerPilot AI")
 st.caption("Discover, score, rank, and reach out to potential partners.")
 
